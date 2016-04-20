@@ -155,11 +155,11 @@
     }
 
     .alert{
-        background: rgba(255,0,0,0.5) !important;
+        background: rgba(0,50,200,0.5) !important;
     }
 
     table.alert{
-        background: rgba(255,150,150,0.5) !important;
+        background: rgba(250,0,0,0.5) !important;
     }
 
     </style>
@@ -216,23 +216,17 @@
 
         var $table = $('tr');
 
-        // log.green($table);
-
-
         for (var i = 0; i < $table.length; i++) {
             var $this = $($table[i]);
             var $th =  $('th', $this);
             var l = $th.length;
 
-            $this.addClass('ok')
+            if( $this.parents('.db__structure').hasClass('alert')) continue;
 
             if(l===3){
 
                 if( $th.eq(0).text() !== $th.eq(2).text() ){
-                    // $th.eq(0).addClass('alert');
-                    // $th.eq(3).addClass('alert');
                     $this.parents('.db__structure').addClass('alert');
-                    continue;
                 }
 
             }

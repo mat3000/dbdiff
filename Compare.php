@@ -12,8 +12,6 @@ class Compare{
 
 	public function __construct($db_1, $db_2){
 
-		// $this->structure_left['db_name'] = $db_1['name'];
-		// $this->structure_right['db_name'] = $db_2['name'];
 		$this->structure_left = (object) ['db_name'=> $db_1['name']];
 		$this->structure_right = (object) ['db_name'=> $db_2['name']];
 
@@ -160,12 +158,6 @@ class Compare{
 
 	private function generate_table(){
 
-		// print_r( $this->structure_left );
-		// print_r( $this->structure_right );
-
-		// die();
-
-
 		$html = '<div class="db_compare">';
 
 			foreach ($this->structure_left->tables as $k=>$left) {
@@ -175,21 +167,6 @@ class Compare{
 				$html .= "<div class=\"block\">";
 
 					$html .= "<div class=\"db db-left\">";
-
-						/*$html .= "<table class=\"db__table\">";
-							$html .=   "<thead>
-											<tr>
-						                        <th>$left->name</th>
-						                        <th></th>
-						                        <th>$right->name</th>
-						                    </tr>
-						                </thead>";
-						$html .= "<tbody>";*/
-						
-						// $html .= "<div class=\"name name_left\">$left->name</div>";
-						// $html .= "<div class=\"name name_right\">$right->name</div>";
-						
-						// $html .= "<div class=\"clear\"></div>";
 
 						$html .= "<table class=\"db__structure\">";
 							$html .=   "<thead>
