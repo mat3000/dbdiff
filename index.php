@@ -28,8 +28,8 @@
 
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     
-    <script type="text/javascript" src="http://matdev.fr/mylog/mylog-5.0/mylog.dev-5.0.18.js"></script>
-    <script type="text/javascript">if(typeof log=='undefined'){log={time:function(){},size:function(){},key:function(){},loop:function(){},info:function(){},red:function(){},orange:function(){},yellow:function(){},green:function(){},Green:function(){},blue:function(){},violet:function(){},white:function(){},grey:function(){},black:function(){},show:function(){},important:function(){},alert:function(){},button:function(){},range:function(){}};};</script>
+    <script src="http://myconsole.matdev.fr/mylog.dev-6.0.0.js"></script>
+    <script type="text/javascript">(function(){var methods=['php','show','hide','info','loop','red','Red','orange','yellow','green','Green','blue','violet','white','grey','black','time','size','key','button','range'];var length=methods.length;var console=(window.log=window.log||{});while(length--){if(!log[methods[length]])log[methods[length]]=function(){};}})();</script>
 
     <style type="text/css">
 
@@ -101,22 +101,30 @@
         table-layout:fixed;
         font-size: 13px;
         font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        /*background: orange; */
     }
     tr{
         /*background: red;*/
         /*border: solid 1px #555;*/
     }
-    tr:hover, thead tr{
-        background: #ddd;
+    tr:hover{
+        background: rgba(0,0,0,0.1);
     }
-    thead th{
-        background: #ddd;
+    thead tr:nth-child(1) th{
+        /*background: #bbb;*/
+        background: rgba(0,0,0,0.2);
+    }
+    thead tr:nth-child(2) th{
+        background: rgba(0,0,0,0.1);
+        color: rgba(0,0,0,0.5);
+        /*color: #666;*/
+        /*font-weight: 400;*/
     }
     tbody th{
         font-weight: 300;
     }
     th{
-        border: solid 1px #999;
+        border: solid 1px rgba(0,0,0,0.2);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -144,6 +152,14 @@
     }
     .name_right{
         width: 50%;
+    }
+
+    .alert{
+        background: rgba(255,0,0,0.5) !important;
+    }
+
+    table.alert{
+        background: rgba(255,150,150,0.5) !important;
     }
 
     </style>
@@ -187,8 +203,6 @@
 
         echo $structure;
 
-        die();
-
         ?>
 
     </div>
@@ -199,6 +213,70 @@
     <script type="text/javascript" src="js/script.js"></script>
     <script type="text/javascript">
     $(function(){
+
+        var $table = $('tr');
+
+        // log.green($table);
+
+
+        for (var i = 0; i < $table.length; i++) {
+            var $this = $($table[i]);
+            var $th =  $('th', $this);
+            var l = $th.length;
+
+            $this.addClass('ok')
+
+            if(l===3){
+
+                if( $th.eq(0).text() !== $th.eq(2).text() ){
+                    // $th.eq(0).addClass('alert');
+                    // $th.eq(3).addClass('alert');
+                    $this.parents('.db__structure').addClass('alert');
+                    continue;
+                }
+
+            }
+
+            if(l===13){
+
+                if( $th.eq(0).text() !== $th.eq(7).text() ){
+                    $th.eq(0).addClass('alert');
+                    $th.eq(7).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+                if( $th.eq(1).text() !== $th.eq(8).text() ){
+                    $th.eq(1).addClass('alert');
+                    $th.eq(8).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+                if( $th.eq(2).text() !== $th.eq(9).text() ){
+                    $th.eq(2).addClass('alert');
+                    $th.eq(9).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+                if( $th.eq(3).text() !== $th.eq(10).text() ){
+                    $th.eq(3).addClass('alert');
+                    $th.eq(10).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+                if( $th.eq(4).text() !== $th.eq(11).text() ){
+                    $th.eq(4).addClass('alert');
+                    $th.eq(11).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+                if( $th.eq(5).text() !== $th.eq(12).text() ){
+                    $th.eq(5).addClass('alert');
+                    $th.eq(12).addClass('alert');
+                    $this.addClass('alert');
+                }
+
+            }
+        }
 
     });
     </script>
