@@ -43,6 +43,30 @@ class Compare{
 
 	}
 
+
+	private function getContent($table){
+
+		$tables_1 = $this->db1->getTables();
+		$tables_2 = $this->db2->getTables();
+
+		foreach ($tables_1 as $value) {
+			$this->structure_left->tables[$value] = (object) ['name'=>$value];
+		}
+
+		foreach ($tables_2 as $value) {
+			$this->structure_right->tables[$value] = (object) ['name'=>$value];
+		}
+
+		foreach ($this->structure_left->tables as $key=>$value) {
+			$this->structure_left->tables[$key]->structure = $this->db1->getStructure($key);
+		}
+
+		foreach ($this->structure_right->tables as $key=>$value) {
+			$this->structure_right->tables[$key]->structure = $this->db2->getStructure($key);
+		}
+
+	}
+
 	public function structure(){
 
 		$this->getStructure();
@@ -75,9 +99,14 @@ class Compare{
 
 		// return ['left'=>$this->structure_left, 'right'=>$this->structure_right];
 
+	}
 
+	public function structure($table){
+
+		$this->getStructure($table);
 
 	}
+
 
 	private function compare_table(){
 
@@ -103,12 +132,10 @@ class Compare{
 
 		foreach ($sm1 as $k => $v) {
 			if( !array_key_exists($k, $s1->tables) ) $sm1[$k] = (object) ['name'=>'', 'structure'=>[]];
-			// if( !array_key_exists($k, $s1->tables) ) $sm1[$k] = (object) ['name'=>0, 'structure'=>0];
 		}
 
 		foreach ($sm2 as $k => $v) {
 			if( !array_key_exists($k, $s2->tables) ) $sm2[$k] = (object) ['name'=>'', 'structure'=>[]];
-			// if( !array_key_exists($k, $s2->tables) ) $sm2[$k] = (object) ['name'=>0, 'structure'=>0];
 		}
 
 		$this->structure_left->tables = $sm1;
@@ -119,10 +146,6 @@ class Compare{
 	private function compare_structure(){
 
 		foreach ($this->structure_left->tables as $k => $table_1) {
-
-			/*if( !$this->structure_left->tables[$k]->name || !$this->structure_right->tables[$k]->name ){
-				continue;
-			}*/
 
 			$s1 = $this->structure_left->tables[$k]->structure;
 			$s2 = $this->structure_right->tables[$k]->structure;
@@ -141,12 +164,10 @@ class Compare{
 
 			foreach ($sm1 as $kII => $v) {
 				if( !array_key_exists($kII, $s1) ) $sm1[$kII] = (object) ['Field'=>'', 'Type'=>'', 'Null'=>'', 'Key'=>'', 'Default'=>'', 'Extra'=>''];
-				// if( !array_key_exists($kII, $s1) ) $sm1[$kII] = 0;
 			}
 
 			foreach ($sm2 as $kII => $v) {
 				if( !array_key_exists($kII, $s2) ) $sm2[$kII] = (object) ['Field'=>'', 'Type'=>'', 'Null'=>'', 'Key'=>'', 'Default'=>'', 'Extra'=>''];
-				// if( !array_key_exists($kII, $s2) ) $sm2[$kII] = 0;
 			}
 
 			$this->structure_left->tables[$k]->structure = $sm1;
