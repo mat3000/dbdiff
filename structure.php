@@ -7,12 +7,13 @@
 
 	$structure = $compare->structure();
 
-	$table = $compare->table('client');
+	// $table = $compare->table('client');
 
 ?></pre>
 
 <?php
 
-	// echo $structure;
+	echo $structure;
+	// echo $table;
 
 ?>

@@ -30,25 +30,17 @@
 
         <?php 
 
-        
-
         $db_1['host'] = 'localhost';
         $db_1['name'] = 'test-1';
-        // $db_1['name'] = 'test-B';
-        // $db_1['name'] = 'test-A1';
         $db_1['user'] = 'root';
         $db_1['pass'] = 'root';
 
         $db_2['host'] = 'localhost';
         $db_2['name'] = 'test-2';
-        // $db_2['name'] = 'test-A';
-        // $db_2['name'] = 'test-A2';
         $db_2['user'] = 'root';
         $db_2['pass'] = 'root';
 
-
         include('structure.php');
-
 
         ?>
 

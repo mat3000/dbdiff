@@ -101,9 +101,13 @@ class Compare{
 
 	}
 
-	public function structure($table){
+	public function table($table){
 
-		$this->getStructure($table);
+		if( empty($this->structure_left->tables[$table]->name) || empty($this->structure_right->tables[$table]->name) ) 
+			return 'Comparaison impossible: les tables doivent exister dans les deux bases.';
+
+		print_r( $this->structure_left->tables[$table] );
+		print_r( $this->structure_right->tables[$table] );
 
 	}
 

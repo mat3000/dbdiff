@@ -107,6 +107,9 @@ ol,ul{list-style:none;}
         padding: 5px;
         height: 30px;
     }
+    th:first-child, th:nth-child(8){
+        font-weight: bold;
+    }
     .db__structure th:nth-child(7){
         width: 5px;
         background: #999;
