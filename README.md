@@ -1,3 +1,3 @@
 # dbdiff
 
-Compare structure of two database
+PHP compare structure of two database
