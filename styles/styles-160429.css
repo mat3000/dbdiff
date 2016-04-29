@@ -1,0 +1,143 @@
+/* CSS reset */
+html,body,ol,pre,form,fieldset,blockquote,th,td{margin:0;padding:0;}
+div,ul,li,h1,h2,h3,h4,h5,h6,input,textarea,p{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight: normal;}
+table {border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+ol,ul{list-style:none;}
+.clear{clear:both;}
+*{-moz-box-sizing:border-box;box-sizing:border-box;}
+/* !CSS reset */
+
+ html,body{
+        height: 100%;
+    }
+
+    b{
+        display: block;
+    }
+
+    header{
+        height: 40px;
+        background: #555;
+    }
+
+    .content{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding-top: 40px;
+    }
+
+    .db{
+        position: relative;
+        width: 100%;
+        float: left;
+    }
+
+    .db-left{
+        padding-right: 0px;
+    }
+
+    .db-right{
+        padding-left: 0px;
+    }
+
+    .db table{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #eee;
+        border: solid 1px #666;
+        float: left;
+        overflow: auto;
+        padding: 5px;
+    }
+
+    .db_compare{
+        
+    }
+
+    .db_compare table:nth-child(1){
+        /*width: 100%;*/
+        float: left;
+    }
+
+    .db_compare table:nth-child(2){
+        
+        /*width: 50%;*/
+        float: left;
+    }
+
+    table{
+        width: 100%;
+        text-align: left;
+        table-layout:fixed;
+        font-size: 13px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        /*background: orange; */
+    }
+    tr{
+        /*background: red;*/
+        /*border: solid 1px #555;*/
+    }
+    tr:hover{
+        background: rgba(255,255,255,.5);
+    }
+    thead tr:nth-child(1) th{
+        /*background: #bbb;*/
+        background: rgba(0,0,0,0.2);
+    }
+    thead tr:nth-child(2) th{
+        background: rgba(0,0,0,0.1);
+        color: rgba(0,0,0,0.5);
+        /*color: #666;*/
+        /*font-weight: 400;*/
+    }
+    tbody th{
+        font-weight: 300;
+    }
+    th{
+        border: solid 1px rgba(0,0,0,0.2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 5px;
+        height: 30px;
+    }
+    th:first-child, th:nth-child(8){
+        font-weight: bold;
+    }
+    .db__structure th:nth-child(7){
+        width: 5px;
+        background: #999;
+    }
+    .db__structure thead tr:nth-child(1) th:nth-child(2){
+        width: 5px;
+        background: #999;
+    }
+
+    .block{
+        margin-top: 10px;
+    }
+
+    .name{
+        float: left;
+        width: 50%;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+    }
+    .name_right{
+        width: 50%;
+    }
+
+    .alert{
+        background: rgba(0,50,200,0.5) !important;
+    }
+
+    table.alert{
+        background: rgba(250,0,0,0.5) !important;
+        /*background: #eee !important;*/
+    }
