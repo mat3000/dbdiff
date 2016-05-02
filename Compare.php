@@ -20,6 +20,31 @@ class Compare{
 
 	}
 
+	public function structure(){
+
+		$this->getStructure();
+		$this->compare_table();
+		$this->compare_structure();
+
+		return $this->generate_table();
+
+	}
+
+	public function table($table){
+
+		$this->getStructure();
+		$this->compare_table();
+		$this->compare_structure();
+
+		if( empty($this->structure_left->tables[$table]->name) || empty($this->structure_right->tables[$table]->name) ) 
+			return 'Comparaison impossible: les tables doivent exister dans les deux bases.';
+
+
+		$this->getContent($table);
+		// print_r( $this->structure_right->tables[$table] );
+
+	}
+
 	private function getStructure(){
 
 		$tables_1 = $this->db1->getTables();
@@ -46,10 +71,16 @@ class Compare{
 
 	private function getContent($table){
 
-		$tables_1 = $this->db1->getTables();
-		$tables_2 = $this->db2->getTables();
+		$content_1 = $this->db1->getContent($this->structure_left->tables[$table]->name);
+		$content_2 = $this->db2->getContent($this->structure_right->tables[$table]->name);
+		print_r( $content_1 );
 
-		foreach ($tables_1 as $value) {
+
+		$this->structure_left->tables[$table]->content = $content_1;
+		$this->structure_right->tables[$table]->content = $content_2;
+		print_r( $this->structure_left->tables[$table] );
+
+		/*foreach ($tables_1 as $value) {
 			$this->structure_left->tables[$value] = (object) ['name'=>$value];
 		}
 
@@ -63,41 +94,12 @@ class Compare{
 
 		foreach ($this->structure_right->tables as $key=>$value) {
 			$this->structure_right->tables[$key]->structure = $this->db2->getStructure($key);
-		}
+		}*/
 
 	}
 
-	public function structure(){
 
-		$this->getStructure();
-
-		// print_r( $this->structure_left );
-		// echo "<br><br><br>";
-		// print_r( $this->structure_right );
-		// echo "<br><br><br>";
-		// die();
-
-		$this->compare_table();
-
-		// print_r( $this->structure_left );
-		// echo "<br><br><br>";
-		// print_r( $this->structure_right );
-		// echo "<br><br><br>";
-		// die();
-
-		$this->compare_structure();
-
-		// print_r( $this->structure_left );
-		// echo "<br><br><br>";
-		// print_r( $this->structure_right );
-		// echo "<br><br><br>";
-		// die();
-
-		return $this->generate_table();
-
-		// die();
-
-		// return ['left'=>$this->structure_left, 'right'=>$this->structure_right];
+	private function compare_content(){
 
 	}
 
@@ -248,75 +250,5 @@ class Compare{
 		return $html;
 
 	}
-
-	/*private function generate_table(){
-
-		$html = '<div class="db_compare">';
-
-			foreach ($this->structure_left->tables as $k=>$left) {
-
-				$right = $this->structure_right->tables[$k];
-
-				$html .= "<div class=\"block\">";
-
-					$html .= "<div class=\"db db-left\">";
-
-						$html .= "<table class=\"db__structure\">";
-							$html .=   "<thead>
-						                    <tr>
-												<th colspan=\"6\">$left->name</th>
-										        <th></th>
-										        <th colspan=\"6\">$right->name</th>
-										    </tr>
-						                    <tr>
-						                        <th>Field</th>
-						                        <th>Type</th> 
-						                        <th>Null</th>
-						                        <th>Key</th>
-						                        <th>Default</th> 
-						                        <th>Extra</th>
-						                        <th></th>
-						                        <th>Field</th>
-						                        <th>Type</th> 
-						                        <th>Null</th>
-						                        <th>Key</th>
-						                        <th>Default</th> 
-						                        <th>Extra</th>
-						                    </tr>
-						                </thead>";
-							$html .= "<tbody>";
-							foreach ($left->structure as $key => $value){
-								$value2 = $right->structure[$key];
-								$html .= "<tr>";
-									$html .= "<th>$value->Field</th>";
-									$html .= "<th>$value->Type</th>";
-									$html .= "<th>$value->Null</th>";
-									$html .= "<th>$value->Key</th>";
-									$html .= "<th>$value->Default</th>";
-									$html .= "<th>$value->Extra</th>";
-									$html .= "<th></th>";
-									$html .= "<th>$value2->Field</th>";
-									$html .= "<th>$value2->Type</th>";
-									$html .= "<th>$value2->Null</th>";
-									$html .= "<th>$value2->Key</th>";
-									$html .= "<th>$value2->Default</th>";
-									$html .= "<th>$value2->Extra</th>";
-								$html .= "</tr>";
-							}
-							$html .= "</tbody>";
-						$html .= "</table>";
-					$html .= "</div>";
-					
-					$html .= "<div class=\"clear\"></div>";
-
-				$html .= "</div>";
-
-			}
-
-		$html .= '</div>';
-
-		return $html;
-
-	}*/
 
 }

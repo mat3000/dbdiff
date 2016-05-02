@@ -64,15 +64,12 @@ class DataBase{
         }
 
         return $ee;
-        // return (object) ['name'=>$this->db_name, 'table'=>$ee];
 
 	}
 
 	public function getStructure($table){
 
 		if($table==='') return false;
-
-		// return $this->query("DESCRIBE `$table`");
 
 		$structure = $this->query("DESCRIBE `$table`");
 		$new_structure = [];
