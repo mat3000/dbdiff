@@ -25,6 +25,7 @@ class Compare{
 		$this->getStructure();
 		$this->compare_table();
 		$this->compare_structure();
+		$this->organize_structure();
 
 		return $this->generate_table();
 
@@ -35,13 +36,42 @@ class Compare{
 		$this->getStructure();
 		$this->compare_table();
 		$this->compare_structure();
+		$this->organize_structure();
 
 		if( empty($this->structure_left->tables[$table]->name) || empty($this->structure_right->tables[$table]->name) ) 
-			return 'Comparaison impossible: les tables doivent exister dans les deux bases.';
-
+			return 'Compare fail: tables must exist on each database.';
 
 		$this->getContent($table);
-		// print_r( $this->structure_right->tables[$table] );
+		$this->compare_content($table);
+
+	}
+
+	private function getContent($table){
+
+		$content_1 = $this->db1->getContent($this->structure_left->tables[$table]->name);
+		$content_2 = $this->db2->getContent($this->structure_right->tables[$table]->name);
+
+		if($this->structure_left->tables[$table]->key_pri){
+			$new_content_1 = [];
+			foreach ($content_1 as $v) {
+				$key_pri = $this->structure_left->tables[$table]->key_pri;
+				$new_content_1[$v->$key_pri] = $v;
+			}
+			$new_content_2 = [];
+			foreach ($content_2 as $v) {
+				$key_pri = $this->structure_right->tables[$table]->key_pri;
+				$new_content_2[$v->$key_pri] = $v;
+			}
+		}else{
+			$new_content_1 = $content_1;
+			$new_content_2 = $content_2;
+		}
+
+		$this->structure_left->tables[$table]->content = $new_content_1;
+		$this->structure_right->tables[$table]->content = $new_content_2;
+
+		// print_r( $this->structure_left->tables[$table]->content );
+		// print_r( $this->structure_right->tables[$table]->content );
 
 	}
 
@@ -68,41 +98,18 @@ class Compare{
 
 	}
 
+	private function compare_content($table){
 
-	private function getContent($table){
-
-		$content_1 = $this->db1->getContent($this->structure_left->tables[$table]->name);
-		$content_2 = $this->db2->getContent($this->structure_right->tables[$table]->name);
-		print_r( $content_1 );
+		print_r( $this->structure_left->tables[$table]->content );
+		print_r( $this->structure_right->tables[$table]->content );
 
 
-		$this->structure_left->tables[$table]->content = $content_1;
-		$this->structure_right->tables[$table]->content = $content_2;
-		print_r( $this->structure_left->tables[$table] );
+		$c1 = $this->structure_left->tables[$table]->content;
+		$c2 = $this->structure_right->tables[$table]->content;
 
-		/*foreach ($tables_1 as $value) {
-			$this->structure_left->tables[$value] = (object) ['name'=>$value];
-		}
 
-		foreach ($tables_2 as $value) {
-			$this->structure_right->tables[$value] = (object) ['name'=>$value];
-		}
-
-		foreach ($this->structure_left->tables as $key=>$value) {
-			$this->structure_left->tables[$key]->structure = $this->db1->getStructure($key);
-		}
-
-		foreach ($this->structure_right->tables as $key=>$value) {
-			$this->structure_right->tables[$key]->structure = $this->db2->getStructure($key);
-		}*/
 
 	}
-
-
-	private function compare_content(){
-
-	}
-
 
 	private function compare_table(){
 
@@ -168,6 +175,67 @@ class Compare{
 
 			$this->structure_left->tables[$k]->structure = $sm1;
 			$this->structure_right->tables[$k]->structure = $sm2;
+			
+		}
+
+	}
+
+	private function array_move($key, $new_index, $array){
+
+	    if($new_index < 0) return;
+	    if($new_index >= count($array)) return;
+	    if(!array_key_exists($key, $array)) return;
+
+	    $ret = array();
+	    $ind = 0;
+	    foreach($array as $k => $v)
+	    {
+	      if($new_index == $ind)
+	      {
+	        $ret[$key] = $array[$key];
+	        $ind++;
+	      }
+	      if($k != $key)
+	      {
+	        $ret[$k] = $v;
+	        $ind++;
+	      }
+	    }
+	    // one last check for end indexes
+	    if($new_index == $ind)
+	        $ret[$key] = $array[$key];
+
+
+	    return $ret;
+	}
+
+	private function organize_structure(){
+
+		foreach ($this->structure_left->tables as $k => $table_1) {
+
+			$s1 = $this->structure_left->tables[$k]->structure;
+			$s2 = $this->structure_right->tables[$k]->structure;
+
+			foreach ($s1 as $key => $value) {
+				if($value->Key==='PRI'){
+					$this->structure_left->tables[$k]->key_pri = $value->Field;
+					$this->structure_right->tables[$k]->key_pri = $value->Field;
+					$s1 = $this->array_move($key, 0, $s1);
+					$s2 = $this->array_move($key, 0, $s2);
+				}
+			}
+
+			foreach ($s2 as $key => $value) {
+				if($value->Key==='PRI'){
+					$this->structure_left->tables[$k]->key_pri = $value->Field;
+					$this->structure_right->tables[$k]->key_pri = $value->Field;
+					$s1 = $this->array_move($key, 0, $s1);
+					$s2 = $this->array_move($key, 0, $s2);
+				}
+			}
+
+			$this->structure_left->tables[$k]->structure = $s1;
+			$this->structure_right->tables[$k]->structure = $s2;
 			
 		}
 

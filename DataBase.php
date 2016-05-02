@@ -34,15 +34,24 @@ class DataBase{
 
 	}
 
-	private function query($statement, $one=false){
+	private function query($statement, $one=false, $fetch='obj'){
 
 		$req = $this->getPDO()->query($statement);
 
-		$req->setFetchMode(PDO::FETCH_OBJ);
-		// $req->setFetchMode(PDO::FETCH_ASSOC);
+		if($fetch==='obj')
+			$req->setFetchMode(PDO::FETCH_OBJ);
+		elseif($fetch==='assoc')
+			$req->setFetchMode(PDO::FETCH_ASSOC);
+		elseif($fetch==='num')
+			$req->setFetchMode(PDO::FETCH_NUM);
+		else{
+			$req->setFetchMode();
+		}
 		
 		if($one) $datas = $req->fetch();
 		else $datas = $req->fetchAll();
+
+
 		
 		return $datas;
 
@@ -86,7 +95,20 @@ class DataBase{
 
 	public function getContent($table){
 
-		return $this->query("SELECT * FROM `$table`");
+		$content = $this->query("SELECT * FROM `$table`", false);
+
+		return $content;
+		// print_r($content);
+
+		// die();
+
+		// $new_content = [];
+		// foreach ($content as $v) {
+		// 	$new_content[ $v-> ] = $v;
+		// }
+
+
+		// print_r($new_content);
 
 	}
 
