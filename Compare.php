@@ -104,9 +104,20 @@ class Compare{
 		print_r( $this->structure_right->tables[$table]->content );
 
 
-		$c1 = $this->structure_left->tables[$table]->content;
+		/*$c1 = $this->structure_left->tables[$table]->content;
 		$c2 = $this->structure_right->tables[$table]->content;
 
+		$cc1 = $this->structure_left->tables[$table]->content;
+		$cc2 = $this->structure_right->tables[$table]->content;
+
+		foreach ($cc1 as $k => $v) {
+			if( !array_key_exists($k, $s1->tables) ) $cc1[$k] = (object) ['name'=>'', 'structure'=>[]];
+		}
+
+		foreach ($sm2 as $k => $v) {
+			if( !array_key_exists($k, $s2->tables) ) $sm2[$k] = (object) ['name'=>'', 'structure'=>[]];
+		}
+*/
 
 
 	}
