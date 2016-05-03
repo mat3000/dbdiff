@@ -45,7 +45,7 @@
         $db_2['user'] = 'root';
         $db_2['pass'] = 'root';
 
-        // include('structure.php');
+        include('structure.php');
         include('table.php');
 
         ?>

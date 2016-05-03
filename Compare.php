@@ -27,7 +27,7 @@ class Compare{
 		$this->compare_structure();
 		$this->organize_structure();
 
-		return $this->generate_table();
+		return $this->generate_structure_table();
 
 	}
 
@@ -44,6 +44,11 @@ class Compare{
 		$this->getContent($table);
 		$this->compare_content($table);
 
+		// print_r($this->structure_left->tables[$table]);
+		// print_r($this->structure_right->tables[$table]);
+
+		return $this->generate_content_table($table);
+
 	}
 
 	private function getContent($table){
@@ -51,27 +56,41 @@ class Compare{
 		$content_1 = $this->db1->getContent($this->structure_left->tables[$table]->name);
 		$content_2 = $this->db2->getContent($this->structure_right->tables[$table]->name);
 
+		$structure_1 = $this->structure_left->tables[$table]->structure;
+		$structure_2 = $this->structure_right->tables[$table]->structure;
+
 		if($this->structure_left->tables[$table]->key_pri){
+
 			$new_content_1 = [];
 			foreach ($content_1 as $v) {
 				$key_pri = $this->structure_left->tables[$table]->key_pri;
-				$new_content_1[$v->$key_pri] = $v;
+				// $new_content_1[$v->$key_pri] = $v;
+				$new_content_1[$v->$key_pri] = (object) array();
+				foreach ($structure_1 as $key => $value) {
+					// $new_content_1[$v->$key_pri]->$key = $v->$key;
+					$new_content_1[$v->$key_pri]->$key = isset($v->$key) ? $v->$key : '';
+				}
 			}
+
 			$new_content_2 = [];
 			foreach ($content_2 as $v) {
 				$key_pri = $this->structure_right->tables[$table]->key_pri;
-				$new_content_2[$v->$key_pri] = $v;
+				// $new_content_2[$v->$key_pri] = $v;
+				$new_content_2[$v->$key_pri] = (object) array();
+				foreach ($structure_2 as $key => $value) {
+					$new_content_2[$v->$key_pri]->$key = isset($v->$key) ? $v->$key : '';
+				}
 			}
+
 		}else{
 			$new_content_1 = $content_1;
 			$new_content_2 = $content_2;
 		}
 
+		// print_r($this->structure_left);
+
 		$this->structure_left->tables[$table]->content = $new_content_1;
 		$this->structure_right->tables[$table]->content = $new_content_2;
-
-		// print_r( $this->structure_left->tables[$table]->content );
-		// print_r( $this->structure_right->tables[$table]->content );
 
 	}
 
@@ -100,25 +119,36 @@ class Compare{
 
 	private function compare_content($table){
 
-		print_r( $this->structure_left->tables[$table]->content );
-		print_r( $this->structure_right->tables[$table]->content );
-
-
-		/*$c1 = $this->structure_left->tables[$table]->content;
-		$c2 = $this->structure_right->tables[$table]->content;
+		$t1 = $this->structure_left->tables[$table];
+		$t2 = $this->structure_right->tables[$table];
 
 		$cc1 = $this->structure_left->tables[$table]->content;
 		$cc2 = $this->structure_right->tables[$table]->content;
 
+		$clean_content_1 = (object) array();
+		$clean_content_2 = (object) array();
+
+		foreach ($t1->structure as $key => $value) {
+			$clean_content_1->$key = '';
+		}
+
+		foreach ($t2->structure as $key => $value) {
+			$clean_content_2->$key = '';
+		}
+
+		foreach ($cc2 as $k => $v) {
+			if( !array_key_exists($k, $t1->content) ) $cc1[$k] = $clean_content_2;
+		}
+		ksort($cc1);
+
 		foreach ($cc1 as $k => $v) {
-			if( !array_key_exists($k, $s1->tables) ) $cc1[$k] = (object) ['name'=>'', 'structure'=>[]];
+			if( !array_key_exists($k, $t2->content) ) $cc2[$k] = $clean_content_1;
 		}
+		ksort($cc2);
 
-		foreach ($sm2 as $k => $v) {
-			if( !array_key_exists($k, $s2->tables) ) $sm2[$k] = (object) ['name'=>'', 'structure'=>[]];
-		}
-*/
 
+		$this->structure_left->tables[$table]->content = $cc1;
+		$this->structure_right->tables[$table]->content = $cc2;
 
 	}
 
@@ -252,7 +282,68 @@ class Compare{
 
 	}
 
-	private function generate_table(){
+	private function generate_content_table($table){
+
+		$html = '<div class="db_compare">';
+
+				$left = $this->structure_left->tables[$table];
+				$right = $this->structure_right->tables[$table];
+
+				$html .= "<div class=\"block\">";
+
+					$html .= "<div class=\"db db-left\">";
+					$html .= "<div class=\"db__table-name\">$left->name</div>";
+						$html .= "<table class=\"db__structure\">";
+							$html .=   "<thead>";
+								$html .= "<tr>";
+								foreach ($left->structure as $key => $value) {
+									$html .= "<th>$value->Field</th>";
+								}
+								$html .= "</tr>";
+							$html .= "</thead>";
+							$html .= "<tbody>";
+							foreach ($left->content as $key => $value){
+								$html .= "<tr>";
+									foreach ($value as $keyII => $valueII) {
+										$html .= "<th>$valueII</th>";
+									}
+								$html .= "</tr>";
+							}
+							$html .= "</tbody>";
+						$html .= "</table>";
+					$html .= "</div>";
+
+					$html .= "<div class=\"db db-right\">";
+					$html .= "<div class=\"db__table-name\">$right->name</div>";
+						$html .= "<table class=\"db__structure\">";
+							$html .=   "<thead>";
+								$html .= "<tr>";
+								foreach ($right->structure as $key => $value) {
+									$html .= "<th>$value->Field</th>";
+								}
+								$html .= "</tr>";
+							$html .= "</thead>";
+							$html .= "<tbody>";
+							foreach ($right->content as $key => $value){
+								$html .= "<tr>";
+									foreach ($value as $keyII => $valueII) {
+										$html .= "<th>$valueII</th>";
+									}
+								$html .= "</tr>";
+							}
+							$html .= "</tbody>";
+						$html .= "</table>";
+					$html .= "</div>";
+
+				$html .= "</div>";
+
+		$html .= '</div>';
+
+		return $html;
+
+	}
+
+	private function generate_structure_table(){
 
 		$html = '<div class="db_compare">';
 
