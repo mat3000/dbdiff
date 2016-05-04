@@ -5,13 +5,15 @@
 
 	$compare = new Compare($db_1, $db_2);
 
-	// $table = $compare->table('client');
-	$table = $compare->table('task');
-
 ?></pre>
 
 <?php
 
-	echo $table;
+	// echo $compare->table('client');
+	// echo $compare->table('task');
+	echo $compare->table('frontpermission');
+	echo $compare->table('frontpgroup');
+	echo $compare->table('frontpgroup_frontpermission');
+
 
 ?>

@@ -18,14 +18,14 @@ class Compare{
 		$this->db1 = new DataBase($db_1['host'], $db_1['name'], $db_1['user'], $db_1['pass']);
 		$this->db2 = new DataBase($db_2['host'], $db_2['name'], $db_2['user'], $db_2['pass']);
 
-	}
-
-	public function structure(){
-
 		$this->getStructure();
 		$this->compare_table();
 		$this->compare_structure();
 		$this->organize_structure();
+
+	}
+
+	public function structure(){
 
 		return $this->generate_structure_table();
 
@@ -33,19 +33,11 @@ class Compare{
 
 	public function table($table){
 
-		$this->getStructure();
-		$this->compare_table();
-		$this->compare_structure();
-		$this->organize_structure();
-
 		if( empty($this->structure_left->tables[$table]->name) || empty($this->structure_right->tables[$table]->name) ) 
 			return 'Compare fail: tables must exist on each database.';
 
 		$this->getContent($table);
 		$this->compare_content($table);
-
-		// print_r($this->structure_left->tables[$table]);
-		// print_r($this->structure_right->tables[$table]);
 
 		return $this->generate_content_table($table);
 

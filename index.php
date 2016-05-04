@@ -34,18 +34,20 @@
         <?php 
 
         $db_1['host'] = 'localhost';
-        $db_1['name'] = 'test-1';
+        // $db_1['name'] = 'test-1';
+        $db_1['name'] = 'cloudingenico';
         // $db_1['name'] = 'total-refontedam-1';
         $db_1['user'] = 'root';
         $db_1['pass'] = 'root';
 
         $db_2['host'] = 'localhost';
-        $db_2['name'] = 'test-2';
+        // $db_2['name'] = 'test-2';
+        $db_2['name'] = 'maaf';
         // $db_2['name'] = 'total-refontedam-2';
         $db_2['user'] = 'root';
         $db_2['pass'] = 'root';
 
-        include('structure.php');
+        // include('structure.php');
         include('table.php');
 
         ?>
